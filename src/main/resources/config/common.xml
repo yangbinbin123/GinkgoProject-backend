@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+	
+	<context:property-placeholder location="classpath:config/jdbc.properties"/>
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<!--maxActive: 最大连接数量-->
+		<property name="maxActive" value="150"></property>
+		<!--minIdle: 最小空闲连接-->
+		<property name="minIdle" value="5"></property>
+		<!--maxIdle: 最大空闲连接-->
+		<property name="maxIdle" value="20"></property>
+		<!--initialSize: 初始化连接-->
+		<property name="initialSize" value="30"></property>
+		<!-- 连接被泄露时是否打印 -->
+		<property name="logAbandoned" value="true"></property>
+		<!--removeAbandoned: 是否自动回收超时连接-->
+		<property name="removeAbandoned" value="true"></property>
+		<!--removeAbandonedTimeout: 超时时间(以秒数为单位)-->
+		<property name="removeAbandonedTimeout" value="10"></property>
+		<!--maxWait: 超时等待时间以毫秒为单位 1000等于60秒-->
+		<property name="maxWait" value="1000"></property>
+		<!-- 在空闲连接回收器线程运行期间休眠的时间值,以毫秒为单位. -->
+		<property name="timeBetweenEvictionRunsMillis" value="10000"></property>
+		<!--  在每次空闲连接回收器线程(如果有)运行时检查的连接数量 -->
+		<property name="numTestsPerEvictionRun" value="10"></property>
+		<!-- 1000 * 60 * 30  连接在池中保持空闲而不被空闲连接回收器线程-->
+		<property name="minEvictableIdleTimeMillis" value="10000"></property>
+	</bean>
+
+	<!-- 配置SeesionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+				<prop key="hibernate.enable_lazy_load_no_trans">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>com.partneration.entity.Answer</value>
+				<value>com.partneration.entity.College</value>
+				<value>com.partneration.entity.Group</value>
+				<value>com.partneration.entity.GroupTask</value>
+				<value>com.partneration.entity.Notice</value>
+				<value>com.partneration.entity.Question</value>
+				<value>com.partneration.entity.School</value>
+				<value>com.partneration.entity.TableWork</value>
+				<value>com.partneration.entity.Task</value>
+				<value>com.partneration.entity.Team</value>
+				<value>com.partneration.entity.User</value>
+				<value>com.partneration.entity.UserGroup</value>
+				<value>com.partneration.entity.UserNotice</value>
+				<value>com.partneration.entity.UserTask</value>
+				<value>com.partneration.entity.UserTeam</value>
+				<value>com.partneration.entity.Work</value>
+				<value>com.partneration.entity.Specialty</value>
+			</list>
+		</property>
+	</bean>
+	
+</beans>
